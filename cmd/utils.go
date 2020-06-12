@@ -1,6 +1,10 @@
 package cmd
 
-import "strings"
+import (
+	"encoding/json"
+	"fmt"
+	"strings"
+)
 
 // 过滤掉非数字
 func NumberFilter(s string) string {
@@ -28,4 +32,39 @@ func getNetworkTraffic(s string) string {
 		}
 	}
 	return ret
+}
+
+func ToJson(v interface{}, pretty ...bool) string {
+	if len(pretty) > 0 && pretty[0] {
+		data, _ := json.MarshalIndent(v, "", "  ")
+		return string(data)
+	}
+	data, _ := json.Marshal(v)
+	return string(data)
+}
+
+// isIgnore is used to check if the server name contained a invalid keyword
+func isIgnore(tag string, ignoreKeys []string) bool {
+	for _, k := range ignoreKeys {
+		if strings.Contains(tag, k) {
+			return true
+		}
+	}
+	return false
+}
+
+var (
+	verbose bool
+)
+
+func logf(f string, _v ...interface{}) {
+	if verbose {
+		fmt.Printf(f+"\n", _v...)
+	}
+}
+
+func log(_v ...interface{}) {
+	if verbose {
+		fmt.Println(_v...)
+	}
 }

@@ -4,9 +4,11 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"io/ioutil"
 	"net/http"
+	"path"
 	"strings"
 )
 
@@ -91,8 +93,13 @@ var (
 )
 
 func get(u string) ([]byte, error) {
+	// Find home directory
+	home, err := homedir.Dir()
+	if err != nil {
+		er(err)
+	}
 	if upArgs.Cache {
-		if data, err := ioutil.ReadFile(".cache.txt"); err == nil {
+		if data, err := ioutil.ReadFile(path.Join(home, ".cache-v2ray-utils.txt")); err == nil {
 			return data, nil
 		}
 	}
@@ -105,7 +112,7 @@ func get(u string) ([]byte, error) {
 	}
 	data, err := ioutil.ReadAll(resp.Body)
 	if err == nil {
-		_ = ioutil.WriteFile(".cache.txt", data, 0644)
+		_ = ioutil.WriteFile(path.Join(home, ".cache-v2ray-utils.txt"), data, 0644)
 	}
 	return data, err
 }
