@@ -38,8 +38,14 @@ var upCmd = &cobra.Command{
 	Use:   "up",
 	Short: "update v2ray subscription",
 	Run: func(cmd *cobra.Command, args []string) {
+		if upArgs.Template == "" {
+			er("missing --template argument")
+		}
+		if upArgs.SubscribeUrl == "" {
+			er("missing --url argument")
+		}
 		fmt.Println("updating from subscription URL")
-		initTemplate()
+		initTemplate(upArgs.Template)
 		var data []byte
 		var err error
 		if upArgs.VmessFile == "" {
@@ -182,14 +188,8 @@ func getDataFromArgs(vmessFile string) (ret []byte, err error) {
 	return
 }
 
-func initTemplate() {
-	if upArgs.Template == "" {
-		er("missing --template argument")
-	}
-	if upArgs.SubscribeUrl == "" {
-		er("missing --url argument")
-	}
-	data, err := ioutil.ReadFile(upArgs.Template)
+func initTemplate(f string) {
+	data, err := ioutil.ReadFile(f)
 	if err != nil {
 		panic(err)
 	}
