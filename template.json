@@ -1,0 +1,142 @@
+{
+  "dns" : {
+    "servers" : [
+      "localhost"
+    ]
+  },
+  "inbounds" : [
+    {
+      "listen" : "127.0.0.1",
+      "port" : 1081,
+      "protocol" : "socks",
+      "tag" : "socksinbound",
+      "settings" : {
+        "auth" : "noauth",
+        "udp" : false,
+        "ip" : "127.0.0.1"
+      }
+    },
+    {
+      "listen" : "127.0.0.1",
+      "port" : 8001,
+      "protocol" : "http",
+      "tag" : "httpinbound",
+      "settings" : {
+        "timeout" : 0
+      }
+    }
+  ],
+  "outbounds" : [
+    {
+      "tag": "Direct",
+      "protocol": "freedom",
+      "settings": {
+        "domainStrategy": "UseIP"
+      }
+    },
+    {
+      "sendThrough" : "0.0.0.0",
+      "mux" : {
+        "enabled" : false,
+        "concurrency" : 8
+      },
+      "protocol" : "vmess",
+      "settings" : {
+        "vnext" : [
+          {
+            "address" : "l1-hk-1.91888888.xyz",
+            "users" : [
+              {
+                "id" : "33f3d195-c604-388f-8903-5ac87f1fb59f",
+                "alterId" : 2,
+                "security" : "auto",
+                "level" : 0
+              }
+            ],
+            "port" : 52959
+          }
+        ]
+      },
+      "tag" : "Demo",
+      "streamSettings" : {
+        "sockopt" : {
+
+        },
+        "quicSettings" : {
+          "key" : "",
+          "security" : "none",
+          "header" : {
+            "type" : "none"
+          }
+        },
+        "tlsSettings" : {
+          "allowInsecure" : false,
+          "alpn" : [
+            "http\/1.1"
+          ],
+          "serverName" : "server.cc",
+          "allowInsecureCiphers" : false
+        },
+        "wsSettings" : {
+          "path" : "\/v2ray",
+          "headers" : {
+            "Host" : "l1-hk-1.91888888.xyz"
+          }
+        },
+        "httpSettings" : {
+          "path" : "",
+          "host" : [
+            ""
+          ]
+        },
+        "tcpSettings" : {
+          "header" : {
+            "type" : "none"
+          }
+        },
+        "kcpSettings" : {
+          "header" : {
+            "type" : "none"
+          },
+          "mtu" : 1350,
+          "congestion" : false,
+          "tti" : 20,
+          "uplinkCapacity" : 5,
+          "writeBufferSize" : 1,
+          "readBufferSize" : 1,
+          "downlinkCapacity" : 20
+        },
+        "security" : "none",
+        "network" : "ws"
+      }
+    }
+  ],
+  "routing" : {
+    "name" : "all_to_main",
+    "domainStrategy" : "IPIfNonMatch",
+    "balancers": [{
+      "tag": "Balancer",
+      "selector": [],
+      "interval": 30,
+      "timeout": 2,
+      "strategy": "latency"
+    }],
+    "rules" : [
+      {
+        "type": "field",
+        "outboundTag": "Direct",
+        "domain": [
+          "geosite:cn",
+          "geosite:private"
+        ]
+      },
+      {
+        "type": "field",
+        "ip": [
+        ],
+        "port": "0-65535",
+        "balancerTag": "Balancer"
+      }
+    ]
+  }
+}
