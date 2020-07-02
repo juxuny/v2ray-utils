@@ -279,5 +279,6 @@ func init() {
 	crawlCmd.PersistentFlags().StringVar(&nbPassword, "password", "", "password of nbsd.live")
 	crawlCmd.PersistentFlags().BoolVar(&nbLogin, "login", true, "re-login")
 	crawlCmd.PersistentFlags().StringVar(&outVmessList, "out", "vmess.list", "output file for vmess list")
+	crawlCmd.PersistentFlags().BoolVar(&verbose, "verbose", false, "display debug output")
 	rootCmd.AddCommand(crawlCmd)
 }
