@@ -24,9 +24,11 @@ var (
 )
 
 const (
-	host      = "https://nbsd.live"
 	UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"
 )
+
+var host string
+var topNum int // the number of node want to use
 
 // 南部隧道客户端
 type NClient struct {
@@ -256,8 +258,8 @@ var crawlCmd = &cobra.Command{
 		}
 		fmt.Println("the number of node: ", len(list))
 
-		if len(list) > 2 {
-			list = list[:2]
+		if len(list) > topNum {
+			list = list[:topNum]
 		} else if len(list) == 0 {
 			fmt.Println("list is empty")
 			return
@@ -275,6 +277,8 @@ var crawlCmd = &cobra.Command{
 }
 
 func init() {
+	crawlCmd.PersistentFlags().IntVar(&topNum, "num", 2, "the number of nodes")
+	crawlCmd.PersistentFlags().StringVar(&host, "host", "https://nbsd.live", "example: https://nbsd.live")
 	crawlCmd.PersistentFlags().StringVar(&nbUser, "user", "", "username of nbsd.live")
 	crawlCmd.PersistentFlags().StringVar(&nbPassword, "password", "", "password of nbsd.live")
 	crawlCmd.PersistentFlags().BoolVar(&nbLogin, "login", true, "re-login")
