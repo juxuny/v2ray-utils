@@ -267,7 +267,7 @@ var crawlCmd = &cobra.Command{
 
 		outData := ""
 		for _, item := range list {
-			fmt.Println(item.Name, item.Vmess)
+			fmt.Println(item.Name, " conn:", item.Connection, " load: ", item.Load, " remain:", item.Remain, item.Vmess)
 			outData += item.Vmess + "\n"
 		}
 		if err := ioutil.WriteFile(outVmessList, []byte(strings.Trim(outData, "\r\n ")), 0644); err != nil {
