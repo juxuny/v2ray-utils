@@ -148,6 +148,7 @@ func parseVmess(data []byte) Outbound {
 		"Host": NewString(obj["add"]),
 	}
 	ret.StreamSettings.Network = NewString(obj["net"])
+	*ret.Tag = strings.ReplaceAll(*ret.Tag, "#", "@")
 	return ret
 }
 
